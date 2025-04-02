@@ -1,1 +1,43 @@
-node_modules
+node_modules# Node.js dependencies
+/node_modules/
+
+# Electron build directories
+/dist/
+/build/
+/out/
+
+# Electron settings files (for example, on macOS)
+*.log
+*.dmg
+*.app
+*.exe
+*.tar.gz
+*.deb
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# npm logs
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Coverage directory for Jest
+/coverage/
+
+# Build output directories
+*.o
+*.so
+*.out
+
+# Miscellaneous
+*.pid
+*.swp
+*.swo
