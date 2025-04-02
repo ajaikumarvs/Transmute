@@ -6,6 +6,8 @@
     <title>Transmute | Universal File Converter</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+        
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
@@ -20,708 +22,458 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         
         body {
-            background-color: #f1f5f9;
-            color: var(--dark);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
             min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        .dashboard {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            min-height: 100vh;
+        .splash-container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
         }
         
-        /* Sidebar */
-        .sidebar {
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            padding: 1.5rem;
-            position: sticky;
-            top: 0;
-            height: 100vh;
+        .logo-container {
+            height: 120px;
+            margin-bottom: 2rem;
+            position: relative;
+            display: flex;
+            justify-content: center;
         }
         
         .logo {
+            font-size: 6rem;
+            font-weight: 900;
             display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 2.5rem;
-        }
-        
-        .logo-icon {
-            background: var(--primary);
-            color: white;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
-        }
-        
-        .logo-text {
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-        
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
             gap: 0.5rem;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
-        .nav-item {
-            padding: 0.75rem;
-            border-radius: 8px;
+        .logo-version {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 6rem;
+            font-weight: 900;
             display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: all 0.2s;
+            justify-content: center;
+            gap: 0.5rem;
+            opacity: 0;
         }
         
-        .nav-item:hover {
-            background: #f1f5f9;
+        .logo-letter {
+            display: inline-block;
+            position: relative;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--primary);
+            animation: float 3s ease-in-out infinite;
         }
         
-        .nav-item.active {
-            background: #eef2ff;
+        .logo-letter.filled::before {
+            content: attr(data-letter);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             color: var(--primary);
         }
         
-        .nav-item i {
-            width: 24px;
-            text-align: center;
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out 2s forwards;
         }
         
-        /* Main Content */
-        .main-content {
-            padding: 2rem;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        
-        .page-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
-        
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .notification-btn {
-            background: none;
+        .cta-button {
+            background: var(--primary);
+            color: white;
             border: none;
-            font-size: 1.25rem;
-            color: var(--gray);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
             cursor: pointer;
             position: relative;
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: var(--secondary);
-            color: white;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        /* Converter Card */
-        .converter-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .file-dropzone {
-            border: 2px dashed var(--gray);
-            border-radius: 12px;
-            padding: 3rem 2rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        
-        .file-dropzone:hover {
-            border-color: var(--primary);
-            background: #f8fafc;
-        }
-        
-        .file-dropzone i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        
-        .file-dropzone h3 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .file-dropzone p {
-            color: var(--gray);
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        .format-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .select-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .select-label {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .select-box {
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background: white;
-            font-size: 1rem;
-            width: 100%;
-        }
-        
-        .convert-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.875rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-        }
-        
-        .convert-btn:hover {
-            background: var(--primary-dark);
-        }
-        
-        /* Recent Files */
-        .recent-files {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            padding: 2rem;
-        }
-        
-        .files-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .files-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .view-all {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .files-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .file-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        
-        .file-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
-        }
-        
-        .file-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            background: #eef2ff;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .file-name {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out 2.5s forwards;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
         }
         
-        .file-meta {
-            color: var(--gray);
-            font-size: 0.8rem;
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
         }
         
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        .cta-button:hover::before {
+            left: 100%;
         }
         
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        .loading-bar {
+            width: 0;
+            height: 4px;
+            background: var(--primary);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            animation: loading 3s ease-out forwards;
         }
         
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
         
-        .stat-label {
-            color: var(--gray);
-            font-size: 0.9rem;
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-float 5s infinite ease-in-out;
         }
         
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
-        .stat-icon.blue {
-            background: #eef2ff;
-            color: var(--primary);
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        .stat-icon.red {
-            background: #fef2f2;
-            color: #ef4444;
+        @keyframes loading {
+            from { width: 0; }
+            to { width: 100%; }
         }
         
-        .stat-icon.green {
-            background: #ecfdf5;
-            color: var(--success);
+        @keyframes particle-float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-500px) rotate(360deg); opacity: 0; }
         }
         
-        .stat-icon.orange {
-            background: #fff7ed;
-            color: #f97316;
+        @keyframes logoMorphIn {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes logoMorphOut {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
         }
         
         /* Responsive */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
+        @media (max-width: 768px) {
+            .logo, .logo-version {
+                font-size: 4rem;
             }
             
-            .sidebar {
-                display: none;
+            .tagline {
+                font-size: 1.2rem;
             }
             
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .logo-container {
+                height: 90px;
             }
         }
         
-        @media (max-width: 640px) {
-            .format-selector {
-                grid-template-columns: 1fr;
+        @media (max-width: 480px) {
+            .logo, .logo-version {
+                font-size: 2.5rem;
+                gap: 0.25rem;
             }
             
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .tagline {
+                font-size: 1rem;
             }
             
-            .files-grid {
-                grid-template-columns: 1fr 1fr;
+            .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .logo-container {
+                height: 60px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-exchange-alt"></i>
-                </div>
-                <span class="logo-text">Transmute</span>
+    <div class="particles" id="particles"></div>
+    
+    <div class="splash-container">
+        <div class="logo-container">
+            <div class="logo" id="mainLogo">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="R">R</span>
+                <span class="logo-letter filled" data-letter="A">A</span>
+                <span class="logo-letter filled" data-letter="N">N</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
             </div>
             
-            <nav class="nav-menu">
-                <a href="#" class="nav-item active">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Converter</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-history"></i>
-                    <span>History</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-image"></i>
-                    <span>Images</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-video"></i>
-                    <span>Videos</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-music"></i>
-                    <span>Audio</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </nav>
-        </aside>
+            <!-- Image Format Versions -->
+            <div class="logo-version" id="tiffVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="I">I</span>
+                <span class="logo-letter filled" data-letter="F">F</span>
+                <span class="logo-letter filled" data-letter="F">F</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <div class="logo-version" id="rawVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="R">R</span>
+                <span class="logo-letter filled" data-letter="A">A</span>
+                <span class="logo-letter filled" data-letter="W">W</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <div class="logo-version" id="pngVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="P">P</span>
+                <span class="logo-letter filled" data-letter="N">N</span>
+                <span class="logo-letter filled" data-letter="G">G</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <!-- Video Format Versions -->
+            <div class="logo-version" id="mp4Version">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="P">P</span>
+                <span class="logo-letter filled" data-letter="4">4</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <div class="logo-version" id="movVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="O">O</span>
+                <span class="logo-letter filled" data-letter="V">V</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <!-- Audio Format Versions -->
+            <div class="logo-version" id="mp3Version">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="P">P</span>
+                <span class="logo-letter filled" data-letter="3">3</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <div class="logo-version" id="wavVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="W">W</span>
+                <span class="logo-letter filled" data-letter="A">A</span>
+                <span class="logo-letter filled" data-letter="V">V</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <!-- Document Format Versions -->
+            <div class="logo-version" id="pdfVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="P">P</span>
+                <span class="logo-letter filled" data-letter="D">D</span>
+                <span class="logo-letter filled" data-letter="F">F</span>
+                <span class="logo-letter filled" data-letter="S">S</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+            
+            <div class="logo-version" id="docxVersion">
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="D">D</span>
+                <span class="logo-letter filled" data-letter="O">O</span>
+                <span class="logo-letter filled" data-letter="C">C</span>
+                <span class="logo-letter filled" data-letter="X">X</span>
+                <span class="logo-letter filled" data-letter="M">M</span>
+                <span class="logo-letter filled" data-letter="U">U</span>
+                <span class="logo-letter filled" data-letter="T">T</span>
+                <span class="logo-letter filled" data-letter="E">E</span>
+            </div>
+        </div>
         
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="header">
-                <h1 class="page-title">Dashboard</h1>
-                
-                <div class="user-menu">
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="user-avatar">JD</div>
-                </div>
-            </header>
-            
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon blue">
-                        <i class="fas fa-file-upload"></i>
-                    </div>
-                    <div class="stat-value">1,248</div>
-                    <div class="stat-label">Files Converted</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon green">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-value">856</div>
-                    <div class="stat-label">Active Users</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon orange">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-value">127h</div>
-                    <div class="stat-label">Time Saved</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon red">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="stat-value">24</div>
-                    <div class="stat-label">New Formats</div>
-                </div>
-            </div>
-            
-            <!-- Converter Card -->
-            <div class="converter-card">
-                <div class="card-header">
-                    <h2 class="card-title">Convert Files</h2>
-                    <div class="quick-actions">
-                        <button class="quick-btn"><i class="fas fa-image"></i> Image</button>
-                        <button class="quick-btn"><i class="fas fa-video"></i> Video</button>
-                        <button class="quick-btn"><i class="fas fa-music"></i> Audio</button>
-                    </div>
-                </div>
-                
-                <div class="file-dropzone" id="dropzone">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Drag & Drop Files Here</h3>
-                    <p>or click to browse files</p>
-                    <input type="file" class="file-input" id="fileInput" multiple>
-                </div>
-                
-                <div class="format-selector">
-                    <div class="select-group">
-                        <label for="inputFormat" class="select-label">Input Format</label>
-                        <select id="inputFormat" class="select-box">
-                            <option value="">Detect Automatically</option>
-                            <optgroup label="Video">
-                                <option value="mp4">MP4</option>
-                                <option value="mov">MOV</option>
-                                <option value="avi">AVI</option>
-                                <option value="mkv">MKV</option>
-                                <option value="webm">WebM</option>
-                            </optgroup>
-                            <optgroup label="Image">
-                                <option value="jpg">JPG</option>
-                                <option value="png">PNG</option>
-                                <option value="gif">GIF</option>
-                                <option value="webp">WebP</option>
-                                <option value="svg">SVG</option>
-                            </optgroup>
-                            <optgroup label="Audio">
-                                <option value="mp3">MP3</option>
-                                <option value="wav">WAV</option>
-                                <option value="flac">FLAC</option>
-                                <option value="aac">AAC</option>
-                                <option value="ogg">OGG</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                    
-                    <div class="select-group">
-                        <label for="outputFormat" class="select-label">Output Format</label>
-                        <select id="outputFormat" class="select-box">
-                            <optgroup label="Video">
-                                <option value="mp4">MP4</option>
-                                <option value="mov">MOV</option>
-                                <option value="avi">AVI</option>
-                                <option value="gif">GIF</option>
-                                <option value="webm">WebM</option>
-                            </optgroup>
-                            <optgroup label="Image">
-                                <option value="jpg">JPG</option>
-                                <option value="png">PNG</option>
-                                <option value="webp">WebP</option>
-                                <option value="ico">ICO</option>
-                                <option value="bmp">BMP</option>
-                            </optgroup>
-                            <optgroup label="Audio">
-                                <option value="mp3" selected>MP3</option>
-                                <option value="wav">WAV</option>
-                                <option value="flac">FLAC</option>
-                                <option value="aac">AAC</option>
-                                <option value="ogg">OGG</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="advanced-options" style="margin-bottom: 1.5rem;">
-                    <button class="toggle-options" style="background: none; border: none; color: var(--primary); font-weight: 500; cursor: pointer;">
-                        <i class="fas fa-cog"></i> Advanced Options
-                    </button>
-                    <div class="options-content" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Quality</label>
-                                <input type="range" min="1" max="100" value="90" style="width: 100%;">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Resolution</label>
-                                <select style="width: 100%; padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 6px;">
-                                    <option>Original</option>
-                                    <option>4K (3840x2160)</option>
-                                    <option>1080p (1920x1080)</option>
-                                    <option>720p (1280x720)</option>
-                                    <option>480p (854x480)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="convert-btn">
-                    <i class="fas fa-exchange-alt"></i> Convert Now
-                </button>
-            </div>
-            
-            <!-- Recent Files -->
-            <div class="recent-files">
-                <div class="files-header">
-                    <h2 class="files-title">Recent Files</h2>
-                    <a href="#" class="view-all">View All</a>
-                </div>
-                
-                <div class="files-grid">
-                    <div class="file-card">
-                        <div class="file-icon">
-                            <i class="fas fa-image"></i>
-                        </div>
-                        <div class="file-name">vacation-photo.jpg</div>
-                        <div class="file-meta">JPG → PNG • 2.4 MB</div>
-                    </div>
-                    
-                    <div class="file-card">
-                        <div class="file-icon">
-                            <i class="fas fa-video"></i>
-                        </div>
-                        <div class="file-name">presentation.mp4</div>
-                        <div class="file-meta">MOV → MP4 • 45.2 MB</div>
-                    </div>
-                    
-                    <div class="file-card">
-                        <div class="file-icon">
-                            <i class="fas fa-music"></i>
-                        </div>
-                        <div class="file-name">podcast-episode.wav</div>
-                        <div class="file-meta">WAV → MP3 • 18.7 MB</div>
-                    </div>
-                    
-                    <div class="file-card">
-                        <div class="file-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
-                        <div class="file-name">document.pdf</div>
-                        <div class="file-meta">PDF → JPG • 3.1 MB</div>
-                    </div>
-                </div>
-            </div>
-        </main>
+        <p class="tagline">Transform any file into any format</p>
+        
+        <button class="cta-button" id="enterButton">
+            <i class="fas fa-bolt"></i> Start Converting
+        </button>
+        
+        <div class="loading-bar"></div>
     </div>
     
     <script>
-        // Toggle advanced options
-        document.querySelector('.toggle-options').addEventListener('click', function() {
-            const options = document.querySelector('.options-content');
-            options.style.display = options.style.display === 'none' ? 'block' : 'none';
-        });
-        
-        // File dropzone interaction
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        
-        dropzone.addEventListener('click', () => fileInput.click());
-        
-        dropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropzone.style.borderColor = '#6366f1';
-            dropzone.style.backgroundColor = '#f8fafc';
-        });
-        
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.style.borderColor = '#94a3b8';
-            dropzone.style.backgroundColor = 'transparent';
-        });
-        
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.style.borderColor = '#94a3b8';
-            dropzone.style.backgroundColor = 'transparent';
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
             
-            if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                updateDropzone(e.dataTransfer.files);
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 5 + 5;
+                const delay = Math.random() * 5;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // Random color variation
+                const hue = 240 + Math.random() * 20 - 10;
+                particle.style.backgroundColor = `hsl(${hue}, 90%, 65%)`;
+                
+                particlesContainer.appendChild(particle);
             }
-        });
-        
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length) {
-                updateDropzone(fileInput.files);
-            }
-        });
-        
-        function updateDropzone(files) {
-            const fileList = Array.from(files).map(file => file.name).join(', ');
-            dropzone.innerHTML = `
-                <i class="fas fa-check-circle" style="color: #10b981;"></i>
-                <h3>${files.length} file(s) selected</h3>
-                <p style="font-size: 0.9rem;">${fileList}</p>
-                <button style="margin-top: 1rem; background: none; border: 1px solid #e2e8f0; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
-                    Change Files
-                </button>
-            `;
-            
-            // Add click event to the change files button
-            dropzone.querySelector('button').addEventListener('click', (e) => {
-                e.stopPropagation();
-                fileInput.value = '';
-                dropzone.innerHTML = `
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Drag & Drop Files Here</h3>
-                    <p>or click to browse files</p>
-                `;
-            });
         }
+        
+        // Initialize particles
+        createParticles();
+        
+        // Button click handler
+        document.getElementById('enterButton').addEventListener('click', function() {
+            // Add ripple effect
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            this.appendChild(ripple);
+            
+            // Remove ripple after animation
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+            
+            // Redirect after animation
+            setTimeout(() => {
+                window.location.href = 'dashboard.html'; // Change to your actual dashboard page
+            }, 1000);
+        });
+        
+        // Logo morphing animation
+        const logoVersions = [
+            'mainLogo',
+            'tiffVersion', 'rawVersion', 'pngVersion',
+            'mp4Version', 'movVersion',
+            'mp3Version', 'wavVersion',
+            'pdfVersion', 'docxVersion'
+        ];
+        
+        let currentVersion = 0;
+        
+        function morphLogo() {
+            // Hide current version
+            const currentLogo = document.getElementById(logoVersions[currentVersion]);
+            currentLogo.style.animation = 'logoMorphOut 0.5s forwards';
+            
+            // Calculate next version (loop back to 0 after last)
+            currentVersion = (currentVersion + 1) % logoVersions.length;
+            
+            // Show next version
+            const nextLogo = document.getElementById(logoVersions[currentVersion]);
+            nextLogo.style.animation = 'logoMorphIn 0.5s forwards';
+            
+            // Schedule next morph
+            setTimeout(morphLogo, 2000); // Change every 2 seconds
+        }
+        
+        // Start morphing after initial animation
+        setTimeout(morphLogo, 3000);
+        
+        // Add styles for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
