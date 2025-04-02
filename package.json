@@ -16,7 +16,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "dist": "electron-builder --linux appimage"
   },
   "devDependencies": {
     "electron": "^35.1.2",
@@ -24,5 +25,19 @@
   },
   "dependencies": {
     "jest": "^29.7.0"
+  },
+  "build": {
+    "appId": "com.yourcompany.transmute",
+    "productName": "Transmute",
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png"
+    },
+    "directories": {
+      "output": "dist"
+    }
   }
 }
