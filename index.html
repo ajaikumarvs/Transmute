@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Transmute - File Conversion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 2s ease-out;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            animation: slideFromTop 1.5s ease-out;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 2s 0.5s forwards;
+        }
+
+        .button {
+            padding: 15px 30px;
+            background-color: #00d2ff;
+            color: white;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: buttonFadeIn 1.5s 1s forwards;
+        }
+
+        .button:hover {
+            background-color: #008ec2;
+            transform: translateY(-5px);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s 2s forwards;
+        }
+
+        .file-label:hover {
+            background-color: #444;
+            transform: translateY(-3px);
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideFromTop {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes buttonFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* File Preview Section */
+        .file-preview {
+            margin-top: 30px;
+            display: none;
+            opacity: 0;
+            animation: fadeIn 2s 2.5s forwards;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .file-preview video {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .file-info {
+            font-size: 1em;
+            color: #333;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            animation: fadeIn 2s 1.5s forwards;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #00d2ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome to Transmute</h1>
+        <p>Convert your audio, video, and image files with ease and speed. Select a file to start converting!</p>
+
+        <label for="fileInput" class="file-label">Choose File</label>
+        <input type="file" id="fileInput" class="file-input">
+
+        <div class="file-preview" id="filePreview">
+            <div id="filePreviewContent"></div>
+            <div class="file-info" id="fileInfo"></div>
+        </div>
+
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+        </div>
+
+        <button class="button" id="convertBtn">Start Conversion</button>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const filePreviewContent = document.getElementById('filePreviewContent');
+        const fileInfo = document.getElementById('fileInfo');
+        const convertBtn = document.getElementById('convertBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // Handle file input
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+
+            if (file) {
+                // Show preview
+                const fileReader = new FileReader();
+
+                fileReader.onload = (e) => {
+                    const fileType = file.type.split('/')[0]; // Extract file type (audio, video, image)
+
+                    if (fileType === 'image') {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        filePreviewContent.innerHTML = '';
+                        filePreviewContent.appendChild(imgElement);
+                    } else if (fileType === 'video') {
+                        const videoElement = document.createElement('video');
+                        videoElement.src = e.target.result;
+                        videoElement.controls = true;
+                        filePreviewContent.innerHTML = '';
+                        filePreviewContent.appendChild(videoElement);
+                    } else if (fileType === 'audio') {
+                        const audioElement = document.createElement('audio');
+                        audioElement.src = e.target.result;
+                        audioElement.controls = true;
+                        filePreviewContent.innerHTML = '';
+                        filePreviewContent.appendChild(audioElement);
+                    }
+
+                    fileInfo.textContent = `File Name: ${file.name} | Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+                    filePreview.style.display = 'block';
+                };
+
+                fileReader.readAsDataURL(file);
+            }
+        });
+
+        // Handle conversion button click
+        convertBtn.addEventListener('click', () => {
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+
+            // Simulate a conversion process with a timeout
+            setTimeout(() => {
+                loadingSpinner.style.display = 'none';
+                alert('File conversion completed!');
+            }, 3000);
+        });
+    </script>
+
+</body>
+
+</html>
