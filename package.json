@@ -19,7 +19,8 @@
     "test": "jest --runInBand"
   },
   "devDependencies": {
-    "electron": "^35.1.2"
+    "electron": "^35.1.2",
+    "electron-builder": "^26.0.12"
   },
   "dependencies": {
     "jest": "^29.7.0"
