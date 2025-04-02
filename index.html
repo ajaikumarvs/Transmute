@@ -1,263 +1,727 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Transmute - File Conversion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Transmute | Universal File Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Global Styles */
-        body, html {
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f43f5e;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+        }
+        
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
-            height: 100%;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+        
+        .logo {
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
         }
-
-        .container {
-            text-align: center;
-            padding: 30px;
-            border-radius: 15px;
-            background-color: white;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 2s ease-out;
-        }
-
-        h1 {
-            color: #333;
-            font-size: 2.5em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            animation: slideFromTop 1.5s ease-out;
-        }
-
-        p {
-            font-size: 1.1em;
-            color: #666;
-            margin-bottom: 30px;
-            opacity: 0;
-            animation: fadeIn 2s 0.5s forwards;
-        }
-
-        .button {
-            padding: 15px 30px;
-            background-color: #00d2ff;
+        
+        .logo-icon {
+            background: var(--primary);
             color: white;
-            font-size: 1.2em;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .nav-item:hover {
+            background: #f1f5f9;
+        }
+        
+        .nav-item.active {
+            background: #eef2ff;
+            color: var(--primary);
+        }
+        
+        .nav-item i {
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .notification-btn {
+            background: none;
             border: none;
-            border-radius: 5px;
+            font-size: 1.25rem;
+            color: var(--gray);
             cursor: pointer;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            animation: buttonFadeIn 1.5s 1s forwards;
+            position: relative;
         }
-
-        .button:hover {
-            background-color: #008ec2;
-            transform: translateY(-5px);
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Converter Card */
+        .converter-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .file-dropzone {
+            border: 2px dashed var(--gray);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .file-dropzone:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+        
+        .file-dropzone i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .file-dropzone h3 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-dropzone p {
+            color: var(--gray);
+        }
+        
         .file-input {
             display: none;
         }
-
-        .file-label {
-            display: inline-block;
-            padding: 12px 25px;
-            font-size: 1.2em;
-            background-color: #333;
+        
+        .format-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .select-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .select-box {
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            width: 100%;
+        }
+        
+        .convert-btn {
+            background: var(--primary);
             color: white;
-            border-radius: 5px;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            animation: fadeIn 1.5s 2s forwards;
+            width: 100%;
+            transition: all 0.2s;
         }
-
-        .file-label:hover {
-            background-color: #444;
-            transform: translateY(-3px);
+        
+        .convert-btn:hover {
+            background: var(--primary-dark);
         }
-
-        /* Animation Keyframes */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
+        
+        /* Recent Files */
+        .recent-files {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 2rem;
+        }
+        
+        .files-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .files-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .file-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .file-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+        
+        .file-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: #eef2ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .file-meta {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon.blue {
+            background: #eef2ff;
+            color: var(--primary);
+        }
+        
+        .stat-icon.red {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        
+        .stat-icon.green {
+            background: #ecfdf5;
+            color: var(--success);
+        }
+        
+        .stat-icon.orange {
+            background: #fff7ed;
+            color: #f97316;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
             }
-            100% {
-                opacity: 1;
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
-
-        @keyframes slideFromTop {
-            0% {
-                transform: translateY(-50px);
-                opacity: 0;
+        
+        @media (max-width: 640px) {
+            .format-selector {
+                grid-template-columns: 1fr;
             }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
-        }
-
-        @keyframes buttonFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* File Preview Section */
-        .file-preview {
-            margin-top: 30px;
-            display: none;
-            opacity: 0;
-            animation: fadeIn 2s 2.5s forwards;
-        }
-
-        .file-preview img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .file-preview video {
-            max-width: 100%;
-            border-radius: 10px;
-        }
-
-        .file-info {
-            font-size: 1em;
-            color: #333;
-            text-align: left;
-            margin-top: 10px;
-        }
-
-        /* Loading spinner */
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            animation: fadeIn 2s 1.5s forwards;
-        }
-
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #00d2ff;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
+            
+            .files-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>
 </head>
-
 <body>
-
-    <div class="container">
-        <h1>Welcome to Transmute</h1>
-        <p>Convert your audio, video, and image files with ease and speed. Select a file to start converting!</p>
-
-        <label for="fileInput" class="file-label">Choose File</label>
-        <input type="file" id="fileInput" class="file-input">
-
-        <div class="file-preview" id="filePreview">
-            <div id="filePreviewContent"></div>
-            <div class="file-info" id="fileInfo"></div>
-        </div>
-
-        <div class="loading-spinner" id="loadingSpinner">
-            <div class="spinner"></div>
-        </div>
-
-        <button class="button" id="convertBtn">Start Conversion</button>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <span class="logo-text">Transmute</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Converter</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-image"></i>
+                    <span>Images</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-music"></i>
+                    <span>Audio</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 class="page-title">Dashboard</h1>
+                
+                <div class="user-menu">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="user-avatar">JD</div>
+                </div>
+            </header>
+            
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <div class="stat-value">1,248</div>
+                    <div class="stat-label">Files Converted</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value">856</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">127h</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">New Formats</div>
+                </div>
+            </div>
+            
+            <!-- Converter Card -->
+            <div class="converter-card">
+                <div class="card-header">
+                    <h2 class="card-title">Convert Files</h2>
+                    <div class="quick-actions">
+                        <button class="quick-btn"><i class="fas fa-image"></i> Image</button>
+                        <button class="quick-btn"><i class="fas fa-video"></i> Video</button>
+                        <button class="quick-btn"><i class="fas fa-music"></i> Audio</button>
+                    </div>
+                </div>
+                
+                <div class="file-dropzone" id="dropzone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & Drop Files Here</h3>
+                    <p>or click to browse files</p>
+                    <input type="file" class="file-input" id="fileInput" multiple>
+                </div>
+                
+                <div class="format-selector">
+                    <div class="select-group">
+                        <label for="inputFormat" class="select-label">Input Format</label>
+                        <select id="inputFormat" class="select-box">
+                            <option value="">Detect Automatically</option>
+                            <optgroup label="Video">
+                                <option value="mp4">MP4</option>
+                                <option value="mov">MOV</option>
+                                <option value="avi">AVI</option>
+                                <option value="mkv">MKV</option>
+                                <option value="webm">WebM</option>
+                            </optgroup>
+                            <optgroup label="Image">
+                                <option value="jpg">JPG</option>
+                                <option value="png">PNG</option>
+                                <option value="gif">GIF</option>
+                                <option value="webp">WebP</option>
+                                <option value="svg">SVG</option>
+                            </optgroup>
+                            <optgroup label="Audio">
+                                <option value="mp3">MP3</option>
+                                <option value="wav">WAV</option>
+                                <option value="flac">FLAC</option>
+                                <option value="aac">AAC</option>
+                                <option value="ogg">OGG</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <div class="select-group">
+                        <label for="outputFormat" class="select-label">Output Format</label>
+                        <select id="outputFormat" class="select-box">
+                            <optgroup label="Video">
+                                <option value="mp4">MP4</option>
+                                <option value="mov">MOV</option>
+                                <option value="avi">AVI</option>
+                                <option value="gif">GIF</option>
+                                <option value="webm">WebM</option>
+                            </optgroup>
+                            <optgroup label="Image">
+                                <option value="jpg">JPG</option>
+                                <option value="png">PNG</option>
+                                <option value="webp">WebP</option>
+                                <option value="ico">ICO</option>
+                                <option value="bmp">BMP</option>
+                            </optgroup>
+                            <optgroup label="Audio">
+                                <option value="mp3" selected>MP3</option>
+                                <option value="wav">WAV</option>
+                                <option value="flac">FLAC</option>
+                                <option value="aac">AAC</option>
+                                <option value="ogg">OGG</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="advanced-options" style="margin-bottom: 1.5rem;">
+                    <button class="toggle-options" style="background: none; border: none; color: var(--primary); font-weight: 500; cursor: pointer;">
+                        <i class="fas fa-cog"></i> Advanced Options
+                    </button>
+                    <div class="options-content" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Quality</label>
+                                <input type="range" min="1" max="100" value="90" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem;">Resolution</label>
+                                <select style="width: 100%; padding: 0.5rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                    <option>Original</option>
+                                    <option>4K (3840x2160)</option>
+                                    <option>1080p (1920x1080)</option>
+                                    <option>720p (1280x720)</option>
+                                    <option>480p (854x480)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="convert-btn">
+                    <i class="fas fa-exchange-alt"></i> Convert Now
+                </button>
+            </div>
+            
+            <!-- Recent Files -->
+            <div class="recent-files">
+                <div class="files-header">
+                    <h2 class="files-title">Recent Files</h2>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                
+                <div class="files-grid">
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="file-name">vacation-photo.jpg</div>
+                        <div class="file-meta">JPG → PNG • 2.4 MB</div>
+                    </div>
+                    
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="file-name">presentation.mp4</div>
+                        <div class="file-meta">MOV → MP4 • 45.2 MB</div>
+                    </div>
+                    
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="file-name">podcast-episode.wav</div>
+                        <div class="file-meta">WAV → MP3 • 18.7 MB</div>
+                    </div>
+                    
+                    <div class="file-card">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-name">document.pdf</div>
+                        <div class="file-meta">PDF → JPG • 3.1 MB</div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-
+    
     <script>
+        // Toggle advanced options
+        document.querySelector('.toggle-options').addEventListener('click', function() {
+            const options = document.querySelector('.options-content');
+            options.style.display = options.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // File dropzone interaction
+        const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('fileInput');
-        const filePreview = document.getElementById('filePreview');
-        const filePreviewContent = document.getElementById('filePreviewContent');
-        const fileInfo = document.getElementById('fileInfo');
-        const convertBtn = document.getElementById('convertBtn');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-
-        // Handle file input
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-
-            if (file) {
-                // Show preview
-                const fileReader = new FileReader();
-
-                fileReader.onload = (e) => {
-                    const fileType = file.type.split('/')[0]; // Extract file type (audio, video, image)
-
-                    if (fileType === 'image') {
-                        const imgElement = document.createElement('img');
-                        imgElement.src = e.target.result;
-                        filePreviewContent.innerHTML = '';
-                        filePreviewContent.appendChild(imgElement);
-                    } else if (fileType === 'video') {
-                        const videoElement = document.createElement('video');
-                        videoElement.src = e.target.result;
-                        videoElement.controls = true;
-                        filePreviewContent.innerHTML = '';
-                        filePreviewContent.appendChild(videoElement);
-                    } else if (fileType === 'audio') {
-                        const audioElement = document.createElement('audio');
-                        audioElement.src = e.target.result;
-                        audioElement.controls = true;
-                        filePreviewContent.innerHTML = '';
-                        filePreviewContent.appendChild(audioElement);
-                    }
-
-                    fileInfo.textContent = `File Name: ${file.name} | Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
-                    filePreview.style.display = 'block';
-                };
-
-                fileReader.readAsDataURL(file);
+        
+        dropzone.addEventListener('click', () => fileInput.click());
+        
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = '#6366f1';
+            dropzone.style.backgroundColor = '#f8fafc';
+        });
+        
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.borderColor = '#94a3b8';
+            dropzone.style.backgroundColor = 'transparent';
+        });
+        
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = '#94a3b8';
+            dropzone.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                updateDropzone(e.dataTransfer.files);
             }
         });
-
-        // Handle conversion button click
-        convertBtn.addEventListener('click', () => {
-            // Show loading spinner
-            loadingSpinner.style.display = 'block';
-
-            // Simulate a conversion process with a timeout
-            setTimeout(() => {
-                loadingSpinner.style.display = 'none';
-                alert('File conversion completed!');
-            }, 3000);
+        
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                updateDropzone(fileInput.files);
+            }
         });
+        
+        function updateDropzone(files) {
+            const fileList = Array.from(files).map(file => file.name).join(', ');
+            dropzone.innerHTML = `
+                <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                <h3>${files.length} file(s) selected</h3>
+                <p style="font-size: 0.9rem;">${fileList}</p>
+                <button style="margin-top: 1rem; background: none; border: 1px solid #e2e8f0; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                    Change Files
+                </button>
+            `;
+            
+            // Add click event to the change files button
+            dropzone.querySelector('button').addEventListener('click', (e) => {
+                e.stopPropagation();
+                fileInput.value = '';
+                dropzone.innerHTML = `
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & Drop Files Here</h3>
+                    <p>or click to browse files</p>
+                `;
+            });
+        }
     </script>
-
 </body>
-
 </html>
