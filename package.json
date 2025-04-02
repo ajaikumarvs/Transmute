@@ -1,0 +1,24 @@
+{
+  "name": "transmute",
+  "version": "1.0.0",
+  "description": "Transmute is the ultimate file conversion app that effortlessly transforms any file type into the format you need—whether it's audio, video, or images. Fast, easy, and seamless, Transmute makes file conversion simple and efficient, no matter the format.",
+  "homepage": "https://github.com/ajaikumarvs/Transmute#readme",
+  "bugs": {
+    "url": "https://github.com/ajaikumarvs/Transmute/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajaikumarvs/Transmute.git"
+  },
+  "license": "MIT",
+  "author": "ajaikumarvs",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "jest --runInBand"
+  },
+  "devDependencies": {
+    "electron": "^35.1.2"
+  }
+}
