@@ -20,5 +20,8 @@
   },
   "devDependencies": {
     "electron": "^35.1.2"
+  },
+  "dependencies": {
+    "jest": "^29.7.0"
   }
 }
